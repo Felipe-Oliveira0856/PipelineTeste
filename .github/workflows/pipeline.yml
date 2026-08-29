@@ -70,4 +70,9 @@ jobs:
       - name: Executar teste de divisão na calculadora em PHP
         run: php test_div.php
 
-  deploy: 
+  deploy:
+    needs: [test_soma, test_sub, test_mult, test_div]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - run: echo "Deploy Enviado"
