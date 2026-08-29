@@ -4,7 +4,7 @@ function multiplicacao($a, $b) {
     return $a * $b;
 }
 
-$resultado = subtracao(2, 4);
+$resultado = multiplicacao(2, 4);
 echo "2 * 4: " . $resultado . "\n";
 
 if ($resultado === 8) {
