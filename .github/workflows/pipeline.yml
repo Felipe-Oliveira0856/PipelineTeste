@@ -37,3 +37,19 @@ jobs:
 
       - name: Executar teste subtracao PHP
         run: php test_sub.php
+  
+  test_mult:
+    needs: test_sub
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste de multiplicação em PHP
+        run: php test_mult.php
