@@ -53,3 +53,19 @@ jobs:
 
       - name: Executar teste de multiplicação em PHP
         run: php test_mult.php
+  
+  test_div:
+    needs: test_mult
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar o PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste de divisão na calculadora em PHP
+        run: php test_div.php
