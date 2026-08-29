@@ -23,7 +23,7 @@ jobs:
       run: pip install pytest
 
       -name: Executar teste soma
-      run: pytest test_soma.php
+      run: pytest test_soma.py
 
     test_sub:
       needs: test_soma
