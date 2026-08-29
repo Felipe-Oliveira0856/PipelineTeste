@@ -1,0 +1,78 @@
+name: Pipeline Demo CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  qualidade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with: 
+          python-version: '3.12'
+
+      - name: Instalar dependências
+        run: pip install pytest
+
+      - name: Executar teste soma
+        run: pytest test_soma.py
+
+  test_sub:
+    needs: test_soma
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste subtracao PHP
+        run: php test_sub.php
+  
+  test_mult:
+    needs: test_sub
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste de multiplicação em PHP
+        run: php test_mult.php
+  
+  test_div:
+    needs: test_mult
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar o PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste de divisão na calculadora em PHP
+        run: php test_div.php
+
+  deploy:
+    needs: [test_soma, test_sub, test_mult, test_div]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - run: echo "Deploy Enviado"
