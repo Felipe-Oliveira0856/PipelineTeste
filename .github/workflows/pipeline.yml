@@ -69,3 +69,5 @@ jobs:
 
       - name: Executar teste de divisão na calculadora em PHP
         run: php test_div.php
+
+  deploy: 
