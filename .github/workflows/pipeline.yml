@@ -24,21 +24,18 @@ jobs:
         run: pytest test_soma.py
 
     test_sub:
-      needs: test_soma
+    needs: test_soma
 
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
 
-      - name: Configurar Python
-        uses: actions/setup-python@v5
-        with: 
-          python-version: '3.12'
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
 
-      - name: Instalar dependências
-        run: pip install pytest
-
-      - name: Executar teste soma
-        run: pytest test_sub.php
+      - name: Executar teste subtracao PHP
+        run: php test_sub.php
