@@ -1,0 +1,36 @@
+name: Primeiro Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  test_soma:
+    runs-on: ubuntu-latest
+
+    steps:
+      -name: Baixar código
+      uses: actions/checkout@v4
+
+      -name: Configurar Python
+      uses: actions/setup-python@v5
+
+      with: 
+        python-version: '3.12'
+
+      -name: Instalar dependências
+      run: pip install pytest
+
+      -name: Executar teste soma
+      run: pytest test_soma.py
+
+    test_sub:
+      needs: test_soma
+    
+    test_mult:
+
+    test_div:
+
+    deploy:
+
