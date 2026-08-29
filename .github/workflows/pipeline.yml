@@ -7,7 +7,6 @@ on:
 jobs:
   test_soma:
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
@@ -23,11 +22,9 @@ jobs:
       - name: Executar teste soma
         run: pytest test_soma.py
 
-    test_sub:
+  test_sub:
     needs: test_soma
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
@@ -36,9 +33,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-
-      - name: Instalar dependências
-        run: pip install php
 
       - name: Executar teste subtracao PHP
         run: php test_sub.php
