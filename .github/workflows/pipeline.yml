@@ -25,12 +25,5 @@ jobs:
       -name: Executar teste soma
       run: pytest test_soma.py
 
-    test_sub:
-      needs: test_soma
-    
-    test_mult:
-
-    test_div:
-
     deploy:
 
