@@ -7,71 +7,28 @@ on:
 jobs:
   qualidade:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Baixar código
+      - name: Baixar código do repositório
         uses: actions/checkout@v4
 
-      - name: Configurar Python
+      - name: Configurar Ambiente Python
         uses: actions/setup-python@v5
         with: 
           python-version: '3.12'
 
       - name: Instalar dependências
-        run: pip install pytest
+        run: pip install -r requirements.txt
 
-      - name: Executar teste soma
-        run: pytest test_soma.py
+      - name: Análise Estática (Linter)
+        run: flake8 .
 
-  test_sub:
-    needs: test_soma
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Baixar código
-        uses: actions/checkout@v4
-
-      - name: Configurar PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-
-      - name: Executar teste subtracao PHP
-        run: php test_sub.php
+      - name: Teste unitários e cobertura minima
+        run: pytest --cov=app --cov-fail-under=90
   
-  test_mult:
-    needs: test_sub
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Baixar código
-        uses: actions/checkout@v4
-
-      - name: Configurar PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-
-      - name: Executar teste de multiplicação em PHP
-        run: php test_mult.php
-  
-  test_div:
-    needs: test_mult
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Baixar código
-        uses: actions/checkout@v4
-
-      - name: Configurar o PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-
-      - name: Executar teste de divisão na calculadora em PHP
-        run: php test_div.php
 
   deploy:
-    needs: [test_soma, test_sub, test_mult, test_div]
+    needs: [qualidade]
     runs-on: ubuntu-latest
     
     steps:
