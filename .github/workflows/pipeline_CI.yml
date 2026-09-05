@@ -30,11 +30,13 @@ jobs:
         with: 
           python-version: '3.12'
 
+
       - name: Instalar dependências
         run: pip install -r requirements.txt
 
       - name: Análise Estática (Linter)
         run: flake8 .
+
 
       - name: Teste unitários e cobertura minima
         run: pytest --cov=app --cov-fail-under=90
