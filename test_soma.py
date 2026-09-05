@@ -7,4 +7,5 @@ def test_soma():
     print(f"Testando soma de 5 + 5: {resultado}")
 
 def test_erro():
-    resultado = soma()
+    resultado = soma(1, 1)
+    print(f"Testando erro: {resultado}")
