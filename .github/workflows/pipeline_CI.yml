@@ -36,7 +36,7 @@ jobs:
 
       - name: Análise Estática (Linter)
         run: flake8 .
-
+        
 
       - name: Teste unitários e cobertura minima
         run: pytest --cov=app --cov-fail-under=90
