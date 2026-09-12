@@ -49,7 +49,7 @@ jobs:
         run: zip -r pipeline-demo.zip .
 
       - name: Publicar artefato
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
 
         with:
           name: codigo-buildado
