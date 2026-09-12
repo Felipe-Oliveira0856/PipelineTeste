@@ -42,7 +42,7 @@ jobs:
         run: pytest --cov=app --cov-fail-under=90
   
   build:
-    runs on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Gerar artefato ZIP
@@ -58,7 +58,7 @@ jobs:
   test_artefato:
     needs: [qualidade, build]
     
-    runs on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Baixar artefato
