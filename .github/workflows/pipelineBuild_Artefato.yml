@@ -42,6 +42,8 @@ jobs:
         run: pytest --cov=app --cov-fail-under=90
   
   build:
+    runs on: ubuntu-latest
+
     steps:
       - name: Gerar artefato ZIP
         run: zip -r pipeline-demo.zip .
@@ -54,6 +56,8 @@ jobs:
           path: pipeline-demo.zip
 
   test_artefato:
+    runs on: ubuntu-latest
+
     steps:
       - name: Baixar artefato
         uses: actions/download-artifact@v4
@@ -66,7 +70,7 @@ jobs:
         
 
   deploy:
-    needs: [qualidade, test_artefato]
+    needs: [qualidade, build, test_artefato]
     runs-on: ubuntu-latest
     
     steps:
