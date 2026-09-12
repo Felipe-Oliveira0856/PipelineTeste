@@ -1,0 +1,73 @@
+name: Pipeline Build e artefato
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  sonar_teste:
+    name: SonarQube
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  qualidade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Ambiente Python
+        uses: actions/setup-python@v5
+        with: 
+          python-version: '3.12'
+
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Análise Estática (Linter)
+        run: flake8 .
+        
+
+      - name: Teste unitários e cobertura minima
+        run: pytest --cov=app --cov-fail-under=90
+  
+  build:
+    steps:
+      - name: Gerar artefato ZIP
+        run: zip -r pipeline-demo.zip .
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@4
+
+        with:
+          name: codigo-buildado
+          path: pipeline-demo.zip
+
+  test_artefato:
+    steps:
+      - name: Baixar artefato
+        uses: actions/download-artifact@v4
+
+        with:
+          name: codigo-buildado
+
+      - name: Extrair artefato
+        run: unzip pipeline-demo.zip
+        
+
+  deploy:
+    needs: [qualidade, test_artefato]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - run: echo "Deploy Enviado"
