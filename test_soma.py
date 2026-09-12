@@ -10,4 +10,3 @@ def test_soma():
 def test_erro():
     resultado = soma(1, 1)
     print(f"Testando erro: {resultado}")
-    
