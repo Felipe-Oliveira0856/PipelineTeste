@@ -84,7 +84,7 @@ jobs:
         run: docker run ${{ secrets.DOCKER_USER }}/pipeline-ci:latest pytest
 
   test-Compose-Docker:
-    needs: build
+    needs: test-docker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do Código
@@ -97,7 +97,7 @@ jobs:
         run: docker compose exec -T calculadora-app ping -c 1 servico-vizinho
 
   deploy:
-    needs: [test-docker]
+    needs: [test-Compose-Docker]
     runs-on: ubuntu-latest
     
     steps:
