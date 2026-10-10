@@ -10,6 +10,17 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+
+  calculadora-app:
+    build: .
+    image: felipheoliveira08/testedocker_compose:latest
+    command: sleep infinity
+
+  servico-vizinho:
+    image: alpine
+    command: sleep infinity
+
+  
   wordpress:
     image: wordpress:latest
     restart: always
@@ -24,14 +35,5 @@ services:
       WORDPRESS_DB_PASSWORD: password_fatec
       WORDPRESS_DB_NAME: wordpress
 
-    volumes:
-      - db_data:/var/lib/mysql
-
-  calculadora-app:
-    build: .
-    image: felipheoliveira08/testedocker_compose:latest
-    command: sleep infinity
-
-  servico-vizinho:
-    image: alpine
-    command: sleep infinity
+volumes:
+  db_data: 
