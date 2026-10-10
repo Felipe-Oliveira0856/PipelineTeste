@@ -1,0 +1,10 @@
+services:
+
+  calculadora-app:
+    build: .
+    image: felipheoliveira08/testedocker_compose:latest
+    command: sleep infinity
+
+  servico-vizinho:
+    image: alpine
+    command: sleep infinity

@@ -1,0 +1,97 @@
+name: Primeiro Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  sonar_teste:
+    name: SonarQube
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+  test_soma:
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with: 
+          python-version: ${{matrix.python-version}}
+          cache: 'pip'
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Executar teste soma
+        run: pytest test_soma.py
+
+  test_sub:
+    needs: test_soma
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste subtracao PHP
+        run: php test_sub.php
+  
+  test_mult:
+    needs: test_sub
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste de multiplicação em PHP
+        run: php test_mult.php
+  
+  test_div:
+    needs: test_mult
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar o PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Executar teste de divisão na calculadora em PHP
+        run: php test_div.php
+
+  deploy:
+    needs: [test_soma, test_sub, test_mult, test_div]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - run: echo "Deploy Enviado"

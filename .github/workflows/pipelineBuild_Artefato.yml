@@ -1,0 +1,73 @@
+name: Pipeline Build e artefato
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  qualidade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Ambiente Python
+        uses: actions/setup-python@v5
+        with: 
+          python-version: '3.12'
+
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Análise Estática (Linter)
+        run: flake8 .
+        
+
+      - name: Teste unitários e cobertura minima
+        run: pytest --cov=app --cov-fail-under=90
+  
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+        
+      - name: Gerar artefato ZIP
+        run: zip -r pipeline-demo.zip .
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: codigo-buildado
+          path: pipeline-demo.zip
+
+  test_artefato:
+    needs: [qualidade, build]
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar artefato
+        uses: actions/download-artifact@v4
+
+        with:
+          name: codigo-buildado
+
+      - name: Extrair artefato
+        run: unzip pipeline-demo.zip
+        
+
+  deploy:
+    needs: [qualidade, build, test_artefato]
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+    
+    steps:
+      - run: echo "Deploy Enviado"
